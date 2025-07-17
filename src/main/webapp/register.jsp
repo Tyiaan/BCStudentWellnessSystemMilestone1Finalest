@@ -21,8 +21,20 @@
     <main>
         <h1>Register</h1>
         <p>Create your student wellness profile to get started. Complete your details below — all fields are required to protect your account.</p>
+<% String error = request.getParameter("error");
+   String success = request.getParameter("success");
+%>
 
+<% if (error != null) { %>
+  <div style="color: red;"><%= error %></div>
+<% } %>
+
+<% if (success != null) { %>
+  <div style="color: green;"><%= success %></div>
+<% } %>
         <form action="register" method="post">
+            
+            
             <label>Student Number:</label><br>
             <input type="text" name="student_number" required><br><br>
 

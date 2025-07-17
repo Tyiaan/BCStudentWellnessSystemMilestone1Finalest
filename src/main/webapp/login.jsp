@@ -21,8 +21,19 @@
     <main>
         <h1>Login</h1>
         <p>Access your personalized wellness dashboard by logging in with your email and password.</p>
+  <% String error = request.getParameter("error");
+   String success = request.getParameter("success");
+%>
 
+<% if (error != null) { %>
+  <div style="color: red;"><%= error %></div>
+<% } %>
+
+<% if (success != null) { %>
+  <div style="color: green;"><%= success %></div>
+<% } %>
         <form action="login" method="post">
+          
             <label>Email:</label><br>
             <input type="text" name="email" required><br><br>
 
