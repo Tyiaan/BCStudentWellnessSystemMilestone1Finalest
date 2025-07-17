@@ -47,8 +47,8 @@
 <% } %>
     <!-- Profile update form -->
     <form action="UpdateProfileServlet" method="post">
-        <label>Phone Number:</label><br>
-        <input type="text" name="phone" placeholder="Enter new phone number" required><br><br>
+        <label>Student Number:</label><br>
+        <input type="text" name="student_number" placeholder="Enter new studentnumber" required><br><br>
 
         <label>Email:</label><br>
         <input type="email" name="email" placeholder="Enter new email" required><br><br>

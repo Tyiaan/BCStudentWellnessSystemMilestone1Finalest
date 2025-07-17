@@ -35,6 +35,17 @@
     <h1>Book a Wellness Appointment</h1>
     <p>Hello, <%= studentName %>! Please use the form below to book your wellness session with our student support team.</p>
 
+    <%
+    String error = request.getParameter("error");
+    String success = request.getParameter("success");
+%>
+
+<% if (error != null) { %>
+  <div style="color: red;"><%= error %></div>
+<% } %>
+<% if (success != null) { %>
+  <div style="color: green;"><%= success %></div>
+<% } %>
     <!-- Simple booking form -->
     <form action="BookAppointmentServlet" method="post">
         <label>Date:</label><br>
