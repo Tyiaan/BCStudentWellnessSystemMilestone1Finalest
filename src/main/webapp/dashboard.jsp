@@ -16,14 +16,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>Student Dashboard</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
+<<<<<<< HEAD
+    <header>
+        <div class="logo">
+            <img src="images/BelgiumCampusLogo.jpg" alt="Belgium Campus Logo">
+            Belgium Campus
+        </div>
+        <nav>
+            <a href="index.jsp">Home</a>
+            <a href="dashboard.jsp">Dashboard</a>
+            <a href="logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Welcome, <%= studentName %>!</h1>
+        <p>This is your personal wellness dashboard. Here you can manage your wellness activities, view upcoming appointments, and stay informed about resources Belgium Campus provides to support your student life.</p>
+
+        <p>We’re committed to helping you balance your studies and wellbeing. Explore your options, reach out for help when you need it, and take care of yourself — you deserve it!</p>
+    </main>
+
+    <footer>
+        &copy; 2025 Belgium Campus Student Wellness | 
+        <a href="https://www.belgiumcampus.ac.za/">Visit Belgium Campus</a> |
+        <a href="https://www.belgiumcampus.ac.za/courses/">Courses</a> |
+        <a href="https://www.belgiumcampus.ac.za/contact/">Contact</a>
+    </footer>
+=======
     <h2>Welcome, <%= studentName %>!</h2>
 
     <form action="logout" method="post">
         <button type="submit">Logout</button>
     </form>
+
 </body>
 </html>
