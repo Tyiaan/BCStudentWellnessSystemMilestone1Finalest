@@ -21,10 +21,21 @@ public class RegisterServlet extends HttpServlet {
         String student_number = request.getParameter("student_number");
         String surname = request.getParameter("surname");
 
-        // ✅ Simple input validation
+         // 1. Validate inputs
         if (name == null || surname == null || email == null || username == null || password == null || student_number == null ||
             name.isEmpty() || surname.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty() || student_number.isEmpty()) {
             response.sendRedirect("register.jsp?error=Please+fill+in+all+fields");
+            return;
+        }
+        // 2. Validate email format
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            response.sendRedirect("register.jsp?error=Invalid+email+format");
+            return;
+        }
+
+        // 3. Validate password strength
+        if (password.length() < 8 || !password.matches(".*\\d.*") || !password.matches(".*[A-Z].*")) {
+            response.sendRedirect("register.jsp?error=Password+must+be+8+chars+long,+contain+a+number+and+uppercase");
             return;
         }
 
