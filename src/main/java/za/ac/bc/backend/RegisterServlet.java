@@ -41,7 +41,7 @@ public class RegisterServlet extends HttpServlet {
 
         try (Connection conn = DBConnector.connect()) {
 
-            // ✅ Check if user exists (by email or username or student number)
+            // Check if user exists (by email or username or student number)
             String checkSql = "SELECT 1 FROM users WHERE email = ? OR username = ? OR student_number = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
@@ -54,10 +54,10 @@ public class RegisterServlet extends HttpServlet {
                 return;
             }
 
-            // ✅ Hash the password
+            // Hash the password
             String hashedPassword = PasswordUtil.hashPassword(password);
 
-            // ✅ Insert new user
+            // Insert new user
             String sql = "INSERT INTO public.users (student_number, name, surname, email, username, password_hash) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, student_number);

@@ -18,7 +18,7 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // ✅ Basic validation
+        // Basic validation
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
             response.sendRedirect("login.jsp?error=Please+enter+both+email+and+password");
             return;
@@ -34,19 +34,19 @@ public class LoginServlet extends HttpServlet {
                 String hashedPassword = rs.getString("password_hash");
 
                 if (hashedPassword.equals(PasswordUtil.hashPassword(password))) {
-                    // ✅ Create a session
+                    // Create a session
                     HttpSession session = request.getSession();
                     session.setAttribute("studentName", rs.getString("name"));
                     session.setAttribute("studentNumber", rs.getString("student_number"));
                     session.setAttribute("email", rs.getString("email"));
 
-                    // ✅ Redirect to dashboard
+                    // Redirect to dashboard
                     response.sendRedirect("dashboard.jsp");
                     return;
                 }
             }
 
-            // ❌ Login failed
+            // Login failed
             response.sendRedirect("login.jsp?error=Invalid+email+or+password");
         } catch (Exception e) {
             e.printStackTrace();
