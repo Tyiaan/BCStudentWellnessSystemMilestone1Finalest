@@ -21,7 +21,8 @@
     <main>
         <h1>Login</h1>
         <p>Access your personalized wellness dashboard by logging in with your email and password.</p>
-  <% String error = request.getParameter("error");
+  
+        <% String error = request.getParameter("error");
    String success = request.getParameter("success");
 %>
 
@@ -32,6 +33,7 @@
 <% if (success != null) { %>
   <div style="color: green;"><%= success %></div>
 <% } %>
+
         <form action="login" method="post">
           
             <label>Email:</label><br>
