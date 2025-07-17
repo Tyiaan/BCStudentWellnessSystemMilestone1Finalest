@@ -2,18 +2,19 @@ package za.ac.bc.backend;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnector {
-    public static Connection connect() throws Exception {
-        String url = "jdbc:postgresql://localhost:5432/WellnessDB";
-        String user = "postgres";
-        String password = System.getenv("PGPASSWORD");  // Secure password placeholder
+    private static final String URL = "jdbc:postgresql://localhost:5432/WellnessDB";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "1234";
 
-        if (password == null) {
-            throw new RuntimeException("Environment variable PGPASSWORD is not set.");
+    public static Connection connect() throws SQLException {
+        try {
+            Class.forName("org.postgresql.Driver"); // Load driver
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("PostgreSQL JDBC Driver not found.", e);
         }
-
-        Class.forName("org.postgresql.Driver");
-        return DriverManager.getConnection(url, user, password);
     }
 }

@@ -1,63 +1,68 @@
 package za.ac.bc.backend;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 
 @WebServlet("/register")
-public class RegisterServlet extends HttpServlet{
-
+public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
-        String studentNumber = request.getParameter("student_number");
         String name = request.getParameter("name");
-        String surname = request.getParameter("surname");
         String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
+        String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String student_number = request.getParameter("student_number");
+        String surname = request.getParameter("surname");
 
-        // Basic Validation
-        if (studentNumber.isEmpty() || name.isEmpty() || surname.isEmpty() ||
-                email.isEmpty() || phone.isEmpty() || password.isEmpty()) {
-            request.setAttribute("error", "All fields are required.");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+        // ✅ Simple input validation
+        if (name == null || surname == null || email == null || username == null || password == null || student_number == null ||
+            name.isEmpty() || surname.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty() || student_number.isEmpty()) {
+            response.sendRedirect("register.jsp?error=Please+fill+in+all+fields");
             return;
         }
 
-        String hashedPassword = PasswordUtil.hashPassword(password);
-
         try (Connection conn = DBConnector.connect()) {
-            // Check if email already exists
-            PreparedStatement checkStmt = conn.prepareStatement("SELECT email FROM users WHERE email = ?");
+
+            // ✅ Check if user exists (by email or username or student number)
+            String checkSql = "SELECT 1 FROM users WHERE email = ? OR username = ? OR student_number = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
+            checkStmt.setString(2, username);
+            checkStmt.setString(3, student_number);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                request.setAttribute("error", "Email already exists.");
-                request.getRequestDispatcher("register.jsp").forward(request, response);
+                response.sendRedirect("register.jsp?error=User+already+exists");
                 return;
             }
 
-            // Insert user
-            PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO users (student_number, name, surname, email, phone, password) VALUES (?, ?, ?, ?, ?, ?)");
-            stmt.setString(1, studentNumber);
-            stmt.setString(2, name);
-            stmt.setString(3, surname);
-            stmt.setString(4, email);
-            stmt.setString(5, phone);
-            stmt.setString(6, hashedPassword);
+            // ✅ Hash the password
+            String hashedPassword = PasswordUtil.hashPassword(password);
 
-            stmt.executeUpdate();
+            // ✅ Insert new user
+            String sql = "INSERT INTO public.users (student_number, name, surname, email, username, password_hash) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, student_number);
+            ps.setString(2, name);
+            ps.setString(3, surname);
+            ps.setString(4, email);
+            ps.setString(5, username);
+            ps.setString(6, hashedPassword);
 
-            request.setAttribute("message", "Registration successful!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            ps.executeUpdate();
+            System.out.println("User registered!");
 
+            response.sendRedirect("login.jsp?success=true");
         } catch (Exception e) {
-            throw new ServletException("Database error: " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect("register.jsp?error=Registration+failed");
         }
     }
 }
